@@ -1,0 +1,30 @@
+[project]
+name = "curator"
+version = "1.0.0"
+description = "Local-first personal knowledge & bookmark management system"
+readme = "README.md"
+requires-python = ">=3.12"
+license = { text = "MIT" }
+authors = [{ name = "Garvit" }]
+
+dependencies = [
+    "fastapi>=0.115.0",
+    "uvicorn[standard]>=0.30.0",
+    "aiosqlite>=0.20.0",
+    "sqlite-vec>=0.1.6",
+    "click>=8.1.0",
+    "httpx>=0.27.0",
+    "pydantic>=2.7.0",
+    "python-multipart>=0.0.9",
+    "fastembed>=0.4.0",
+]
+
+[project.scripts]
+curator = "curator.__main__:cli"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/curator"]

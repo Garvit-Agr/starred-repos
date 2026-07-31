@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Curator — Knowledge Manager</title>
+    <meta name="description" content="Local-first personal knowledge & bookmark manager">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📚</text></svg>">
+</head>
+<body>
+    <div id="app">
+        <!-- Sidebar Navigation -->
+        <nav id="sidebar" class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <span class="logo-icon">📚</span>
+                    <span class="logo-text">Curator</span>
+                </div>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#/" class="nav-link active" data-page="dashboard">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+                    Dashboard
+                </a></li>
+                <li><a href="#/browse" class="nav-link" data-page="browse">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+                    Browse
+                </a></li>
+                <li><a href="#/duplicates" class="nav-link" data-page="duplicates">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="8" y="2" width="13" height="13" rx="2"/><path d="M4 8a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2"/></svg>
+                    Duplicates
+                    <span id="dup-badge" class="badge hidden">0</span>
+                </a></li>
+                <li><a href="#/import" class="nav-link" data-page="import">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    Import / Export
+                </a></li>
+                <li><a href="#/settings" class="nav-link" data-page="settings">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+                    Settings
+                </a></li>
+            </ul>
+            <div class="sidebar-footer">
+                <div class="version">v1.0.0</div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main id="main-content" class="main-content">
+            <div id="page-container"></div>
+        </main>
+
+        <!-- Add Item Modal -->
+        <div id="add-modal" class="modal hidden">
+            <div class="modal-backdrop"></div>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Add Item</h2>
+                    <button class="btn-icon" onclick="App.closeModal()">✕</button>
+                </div>
+                <form id="add-form" onsubmit="App.handleAddItem(event)">
+                    <div class="form-group">
+                        <label for="add-url">URL</label>
+                        <input type="url" id="add-url" placeholder="https://..." class="input">
+                    </div>
+                    <div class="form-group">
+                        <label for="add-title">Title *</label>
+                        <input type="text" id="add-title" required placeholder="Item title" class="input">
+                    </div>
+                    <div class="form-group">
+                        <label for="add-description">Description</label>
+                        <textarea id="add-description" placeholder="Brief description..." class="input" rows="3"></textarea>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="add-type">Type</label>
+                            <select id="add-type" class="input">
+                                <option value="website">Website</option>
+                                <option value="repo">Repository</option>
+                                <option value="blog">Blog</option>
+                                <option value="course">Course</option>
+                                <option value="textbook">Textbook</option>
+                                <option value="document">Document</option>
+                                <option value="note">Note</option>
+                                <option value="snippet">Snippet</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="add-difficulty">Difficulty</label>
+                            <select id="add-difficulty" class="input">
+                                <option value="">Not specified</option>
+                                <option value="beginner">Beginner</option>
+                                <option value="intermediate">Intermediate</option>
+                                <option value="advanced">Advanced</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="add-tags">Tags (comma-separated)</label>
+                        <input type="text" id="add-tags" placeholder="python, tutorial, web" class="input">
+                    </div>
+                    <div class="form-group">
+                        <label for="add-notes">Notes</label>
+                        <textarea id="add-notes" placeholder="Your notes..." class="input" rows="3"></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" onclick="App.closeModal()">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Save Item</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Floating Add Button -->
+        <button id="fab" class="fab" onclick="App.openModal()" title="Add Item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </button>
+
+        <!-- Toast Container -->
+        <div id="toast-container" class="toast-container"></div>
+    </div>
+
+    <script src="/static/js/app.js"></script>
+</body>
+</html>

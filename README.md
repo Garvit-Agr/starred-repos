@@ -535,4 +535,4 @@ rm -rf /path/to/curator
 
 ## 📜 License
 
-MIT
+This project is licensed under the Apache License, Version 2.0. See the [LICENSE.md](LICENSE.md) file for details.
